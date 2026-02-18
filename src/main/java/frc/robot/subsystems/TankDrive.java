@@ -1,34 +1,38 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TankDrive extends SubsystemBase {
-  private final SparkMax  leftFront;
-  private final SparkMax leftBack;
-  private final SparkMax rightFront;
-  private final SparkMax rightBack;
+  private final WPI_VictorSPX  leftFront;
+  private final WPI_TalonSRX leftBack;
+  private final WPI_VictorSPX rightFront;
+  private final WPI_VictorSPX rightBack;
+
   
   private final DifferentialDrive drive;
 
   public TankDrive() {
     // CAN IDs - change these numbers to match your robot's actual IDs
-    leftFront = new SparkMax(1, MotorType.kBrushed);
-    leftBack = new SparkMax(2, MotorType.kBrushed);
-    rightFront = new SparkMax(3, MotorType.kBrushed);
-    rightBack = new SparkMax(4, MotorType.kBrushed);
+    leftFront = new WPI_VictorSPX(1);
+    leftBack = new WPI_TalonSRX(6);
+    rightFront = new WPI_VictorSPX(4);
+    rightBack = new WPI_VictorSPX(2);
     
     // Invert right side so both sides drive forward together
     rightFront.setInverted(true);
     rightBack.setInverted(true);
     
     // Group the motors
-    edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup leftMotors = 
-      new edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup(leftFront, leftBack);
-    edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup rightMotors = 
-      new edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup(rightFront, rightBack);
+   @SuppressWarnings("removal")
+  MotorControllerGroup leftMotors = new MotorControllerGroup(leftFront, leftBack);
+    @SuppressWarnings("removal")
+    MotorControllerGroup rightMotors = new MotorControllerGroup(rightFront, rightBack);
     
     drive = new DifferentialDrive(leftMotors, rightMotors);
   }
